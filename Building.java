@@ -81,9 +81,10 @@ public class Building
         
         while(upTravellers > 0)
         {
+            System.out.println();
             System.out.println("proceed?");
             String proceed = in.next();
-            if(proceed.equals("Y"))
+            if((proceed.equals("Y"))||(proceed.equals("y")))
             {
                 //prints the array list
                 System.out.println();
@@ -121,13 +122,12 @@ public class Building
                         list = Customer.OutElevator(i);
                         System.out.println("CUSTOMER destination FLOOR MATCHES THE CURRENT FLOOR");
                         upTravellers -= 1;
-                        
                     }
                 }
                 
                 System.out.println("the next floor that the elevator will travel to is: " + closestFloorUp());
                 //changes the floor of the elevator
-                n.move(closestFloorUp() - n.currentFloor());
+                n.move(closestFloorUp()-n.currentFloor());
                 System.out.println("Up travellers: " + upTravellers);
             }
         }
@@ -181,42 +181,59 @@ public class Building
             }
         }
         
-        if(n.currentFloor() == highestUpCurrent)
+        int nextDestinationFloor = 0;
+        int nextCurrentFloor = 0;
+        //counts the next current floor to travel to
+        outerloop:
+        for(int i = n.currentFloor() ; i <= highestDestination() ; i++)
         {
-            System.out.println("The highest up floor has been reached");
-            outerloop:
-            for(int i = n.currentFloor() ; i < highestDestination() ; i++)
+            for(int x = 0 ; x < totalCustomers ; x++)
             {
-                for(int x = 0 ; x < totalCustomers ; x++)
-                {
-                    if((list.get(x).get(3)==true)&&(list.get(x).get(5).equals("UP")))
-                    {
-                        int c = (Integer) list.get(x).get(2);
-                        if((c == i)&&(c > n.currentFloor()))
-                        {
-                            nextUpFloor = i;
-                            break outerloop;
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            outerloop:
-            for(int i = n.currentFloor() ; i < highestDestination() ; i++)
-            {
-                for(int x = 0 ; x < totalCustomers ; x++)
+                if((list.get(x).get(5).equals("UP"))&&(list.get(x).get(4) == false))
                 {
                     int c = (Integer) list.get(x).get(1);
                     if((c == i)&&(c > n.currentFloor()))
                     {
-                        nextUpFloor = i;
+                        nextCurrentFloor = i;
                         break outerloop;
                     }
                 }
             }
         }
+        
+        //counts the next destination floor to travel to
+        outerloop:
+        for(int i = n.currentFloor() ; i <= highestDestination() ; i++)
+        {
+            for(int x = 0 ; x < totalCustomers ; x++)
+            {
+                if((list.get(x).get(5).equals("UP"))&&(list.get(x).get(4) == false))
+                {
+                    int c = (Integer) list.get(x).get(2);
+                    if((c == i)&&(c > n.currentFloor()))
+                    {
+                        nextDestinationFloor = i;
+                        break outerloop;
+                    }
+                }
+            }
+        }
+        System.out.println("The next destination floor = " + nextDestinationFloor);
+        System.out.println("The next current floor = "+ nextCurrentFloor);
+        
+        if((nextCurrentFloor != 0)&&(nextDestinationFloor != 0))
+        {
+            nextUpFloor = Math.min(nextDestinationFloor, nextCurrentFloor);
+        }
+        else if((nextCurrentFloor == 0)&&(nextDestinationFloor != 0))
+        {
+            nextUpFloor = nextDestinationFloor;
+        }
+        else if((nextCurrentFloor != 0)&&(nextDestinationFloor == 0))
+        {
+            nextUpFloor = nextCurrentFloor;
+        }
+
         return nextUpFloor;
     }
     
