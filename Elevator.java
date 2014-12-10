@@ -3,6 +3,7 @@ public class Elevator
     private int current = 0;
     private int currentOnBoard = 0;
     private static int numOfFloors;
+    int floorCount = 0; 
     
     public void setFloors(int a)
     {
@@ -36,14 +37,20 @@ public class Elevator
             while(a > 0)
             {
                 current += 1;
-                System.out.println("The elevator has moved to level up one level to: " + current);
+                System.out.println("The elevator has moved up one level to: " + current);
                 a -= 1;
+                floorCount += 1;
             }
         }
         else if(a < 0)//go down a floor(s)
         {
-            current -=1;
-            System.out.println("The elevator has moved to level: " + current);
+            while(a < 0)
+            {
+                current -=1;
+                System.out.println("The elevator has moved to down one level to: " + current);
+                a +=1;
+                floorCount += 1;
+            }
         }
         else 
         {
@@ -54,6 +61,11 @@ public class Elevator
     public void customerJoins()
     {
         currentOnBoard++;
+    }
+    
+    public int returnFloorCount()
+    {
+        return floorCount;
     }
     
     public void customerLeaves()

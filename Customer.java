@@ -66,8 +66,9 @@ public class Customer
            id = ID();
            currentFloor = setCurrentFloor();
            destinationFloor = setDestinationFloor();
-           while(destinationFloor == currentFloor)//Ensure that the destination floor is different from the currentfloor
+           while((destinationFloor == currentFloor)||(destinationFloor == 13)||(currentFloor == 13))
            {
+               currentFloor = setCurrentFloor();
                destinationFloor = setDestinationFloor();
            }
            list.get(i).add(id);
