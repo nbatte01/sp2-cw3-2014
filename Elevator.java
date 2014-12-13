@@ -4,6 +4,7 @@ public class Elevator
     private int currentOnBoard = 0;
     private static int numOfFloors;
     int floorCount = 0; 
+    int topFloor = 0;
     
     public void setFloors(int a)
     {
@@ -25,6 +26,11 @@ public class Elevator
         return current;
     }
     
+    public void setTopfloor(int a)
+    {
+        topFloor = a;
+    }
+    
     public void direction()
     {
         
@@ -34,23 +40,15 @@ public class Elevator
     {
         if(a > 0) //go up a floor(s)
         {
-            while(a > 0)
-            {
-                current += 1;
-                System.out.println("The elevator has moved up one level to: " + current);
-                a -= 1;
-                floorCount += 1;
-            }
+            current += a;
+            System.out.println("The elevator has moved up to level: " + current);
+            floorCount += 1;
         }
         else if(a < 0)//go down a floor(s)
         {
-            while(a < 0)
-            {
-                current -=1;
-                System.out.println("The elevator has moved to down one level to: " + current);
-                a +=1;
-                floorCount += 1;
-            }
+            current += a;
+            System.out.println("The elevator has moved down to level: " + current);
+            floorCount += 1;
         }
         else 
         {
