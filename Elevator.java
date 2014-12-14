@@ -5,6 +5,7 @@ public class Elevator
     private static int numOfFloors;
     int floorCount = 0; 
     int topFloor = 0;
+    boolean topFloorReached = false;
     
     public void setFloors(int a)
     {
@@ -23,6 +24,10 @@ public class Elevator
     
     public int currentFloor()
     {
+        if(current == topFloor)
+        {
+            topFloorReached = true;
+        }
         return current;
     }
     
@@ -31,9 +36,19 @@ public class Elevator
         topFloor = a;
     }
     
-    public void direction()
+    public String direction()
     {
-        
+        String direction = "";
+        //if the top floor has been reached once
+        if(topFloorReached)
+        {
+            direction = "DOWN";
+        }
+        else
+        {
+            direction = "UP";
+        }
+        return direction;
     }
     
     public void move(int a)//send this method an int of the nunber of floors to change ie -1, -2 or plus two. If the user only sends a 0 then floors do not move
