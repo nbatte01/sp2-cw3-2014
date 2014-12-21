@@ -1,11 +1,12 @@
-import java.util.Scanner;
+ import java.util.Scanner;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-public class Building
+public class building
 {
     public static int totalFloors;
     public static int totalCustomers;
+    public static boolean topFloorReached = false;
     public static ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
     static Elevator n = new Elevator();
     public static void main(String[]args)
@@ -30,6 +31,7 @@ public class Building
             }
         }
         //Ensures that the user inputs an int which is then stored as the total number of customers
+        
         while(customersCheck == false)
         {
             System.out.print("Please enter the number of customers: ");
@@ -40,23 +42,48 @@ public class Building
                 totalCustomers = (Integer.valueOf(customers));
                 Customer x = new Customer();
                 list = x.customerList(totalCustomers);//customer class will return a arraylist that contain ID number, current floor, destination floor and whether or not the customer is still in the lift
-                System.out.print("PLease enter the chosen strategy. Strategy 1 is the default : ");
-                String chosenStrategy = in.next();
-                int strategy = Integer.valueOf(chosenStrategy);
-                //choose which strategy to use
-                while((!intValidation(chosenStrategy))||(strategy!=1&&strategy!=2))
+                
+                int firstCount =  business2();
+                
+                //RESETS THE CUSTOMER AND ELEVATOR CLASS
+                Customer.resetList();
+                n.resetElevator();
+                
+                int secondCount =  business();
+                
+                //Display the results
+                System.out.println();
+                System.out.println("Second strategy results");
+                System.out.println("The total number of floors visited after the second strategy: " + firstCount);
+                System.out.println("The total number of floors in the building: "+ totalFloors);
+                //calculates the perentage of floors visited to allow for easier strategy performance review
+                double percentageVisited = (firstCount*100)/totalFloors;
+                System.out.println("Percentage of floors visited: " + percentageVisited + "%");
+                
+                System.out.println();
+                System.out.println("Default strategy results");
+                System.out.println("The total number of floors visited after the default strategy: " + secondCount);
+                System.out.println("The total number of floors in the building: "+ totalFloors);
+                //calculates the perentage of floors visited to allow for easier strategy performance review
+                double percentageVisited2 = (secondCount*100)/totalFloors;
+                System.out.println("Percentage of floors visited: " + percentageVisited2 + "%");
+                
+                System.out.println();
+                System.out.println("Final verdict:");
+                if(percentageVisited2 > percentageVisited)
                 {
-                    System.out.print("Please ensure that you only enter '1' or '2': ");
-                    chosenStrategy = in.next();
+                    System.out.println("The second strategy was more efficient than the default as it visited " + (secondCount - firstCount) + " less floor(s)");
                 }
-                if(strategy == 1)//default strategy
+                else if(percentageVisited > percentageVisited2)
                 {
-                    business();
+                    System.out.println("The default strategy was more efficient than the second as it visited " + (firstCount - secondCount) + " less floor(s)");
                 }
-                else if(strategy ==2)//secondary strategy
+                else
                 {
-                    business2();
+                    System.out.println("Both strategies acheived the same efficiency as each other");
                 }
+                
+                
                 customersCheck = true;
             }
             else
@@ -64,20 +91,9 @@ public class Building
                 System.out.println("Please ensure that you only enter an int");
             }
         }
-        
-        //prints out the final finished arraylist
-        System.out.println();
-        System.out.println("the final arraylist");
-        for(int i = 0 ; i < totalCustomers ; i++)
-        {
-            System.out.println(list.get(i));
-        }
-        System.out.println();
-        System.out.println("The total number of floors visited: "+n.returnFloorCount());
-        System.out.println("The total number of floors in the building: "+ totalFloors);
     }
     
-    //Validates the input string to ensure that it is a number which can be converted to an int
+    //Validates the input string to ensure that it is a number which can be converted to an int //WORKING
     public static boolean intValidation(String a) 
     {
         boolean result = false;
@@ -88,75 +104,42 @@ public class Building
         return result;
     }
     
-    //default strategy
-    public static void business()
+    public static void customerCheck()
     {
-        System.out.println("The highest current floor: "+highestCurrent());
-        System.out.println("The highest destination floor: " + highestDestination());
-        System.out.println();
-        System.out.println("Start of calculations");
+        
+    }
+    
+    //default strategy //WORKING
+    public static int business()
+    {
         Scanner in = new Scanner(System.in);
         n.setTopfloor(topFloor());
-        int upTravellers = 0;
-        int downTravellers = 0;
-        int travellers = 0;
-        //counts the number of up and down travellers
-        for(int i = 0 ; i < totalCustomers ; i++)
+        int upTravellers = Customer.returnUpTravellers();
+        int downTravellers = Customer.returnDownTravellers();
+        int travellers = Customer.totalTravellers();
+        while(Customer.totalTravellers() > 0)
         {
-            if(list.get(i).get(5).equals("UP"))
-            {
-                upTravellers += 1;
-            }
-            else if(list.get(i).get(5).equals("DOWN"))
-            {
-                downTravellers += 1;
-            }
-            if(list.get(i).get(4)==false)
-            {
-                travellers += 1;
-            }
-        }
-      
-        
-        while(upTravellers > 0)
-        {
-            System.out.println();
-            System.out.println("proceed?");
-            String proceed = in.next();
-            if((proceed.equals("Y"))||(proceed.equals("y")))
-            {
-                //prints the array list
-                System.out.println();
-                System.out.println("The current floor on the elevator class is: " + n.currentFloor());
-                System.out.println();
-                for(int i = 0 ; i < totalCustomers ; i++)
-                {
-                    System.out.println(list.get(i));
-                }
-    
-                //if the customers current floor matches the elevator current floor 
-                for(int i = 0 ; i <totalCustomers ; i++)
-                {
-                    int b = (Integer) list.get(i).get(1);
-                    int c = (Integer) list.get(i).get(2);
-                    //checks that the current floor of the customers matche sthat of the elvator 
-                    //Checks that the destination floor of the customer is higher than their current floor thus travelling up
-                    //chevck that they are current not in the elevator
-                    if((b == n.currentFloor()) && (b<c) && (list.get(i).get(3)==false))
-                    {
-                        list = Customer.inElevator(i);
-                        System.out.println("Customer "+ list.get(i).get(0) + " has entered the elevator");
-                    }
-                    if((c == n.currentFloor()) && (list.get(i).get(3)==true) && (list.get(i).get(4)==false))
-                    {
-                        list = Customer.OutElevator(i);
-                        System.out.println("Customer "+ list.get(i).get(0) + " has arrived at their destination");
-                        upTravellers -= 1;
-                    }
-                }
                 
+            //if the customers current floor matches the elevator current floor or destination floor
+            for(int i = 0 ; i <totalCustomers ; i++)
+            {
+                int b = (Integer) list.get(i).get(1);
+                int c = (Integer) list.get(i).get(2);
+                //can only board the elevator if the customer is travelling in the correct direction, not currently in the elevator and have not already complted their journey
+                if((b == n.currentFloor()) && (list.get(i).get(5).equals(n.direction()) && (list.get(i).get(3)==false))&&(list.get(i).get(4)==false))
+                {
+                    list = Customer.inElevator(i);
+                }
+                if((c == n.currentFloor()) && (list.get(i).get(3)==true) && (list.get(i).get(4)==false))
+                {
+                    list = Customer.OutElevator(i);
+                }
+            }
+            
+            if(Customer.returnUpTravellers() > 0)
+            {
                 int nextUpFloor = n.currentFloor();
-        
+                
                 int nextDestinationFloor = 0;
                 int nextCurrentFloor = 0;
                 //counts the next current floor to travel to
@@ -166,7 +149,7 @@ public class Building
                     for(int x = 0 ; x < totalCustomers ; x++)
                     {
                         
-                        if((list.get(x).get(5).equals(n.direction()))&&(list.get(x).get(4) == false)&&(list.get(x).get(3)==false))
+                        if((list.get(x).get(5).equals("UP")&&(list.get(x).get(4) == false)&&(list.get(x).get(3)==false)))
                         {
                             int c = (Integer) list.get(x).get(1);
                             if((c == i)&&(c > n.currentFloor()))
@@ -184,7 +167,7 @@ public class Building
                 {
                     for(int x = 0 ; x < totalCustomers ; x++)
                     {
-                        if((list.get(x).get(5).equals(n.direction()))&&(list.get(x).get(4) == false)&&(list.get(x).get(3) == true))
+                        if((list.get(x).get(5).equals("UP"))&&(list.get(x).get(4) == false)&&(list.get(x).get(3) == true))
                         {
                             int c = (Integer) list.get(x).get(2);
                             if((c == i)&&(c > n.currentFloor()))
@@ -210,58 +193,22 @@ public class Building
                     nextUpFloor = nextCurrentFloor;
                 }
         
-                
                 //changes the floor of the elevator
                 if(upTravellers > 0)
                 {
-                    System.out.println("the next floor that the elevator will travel to is: " + nextUpFloor);
                     n.move(nextUpFloor-n.currentFloor());
                 }
-                    
-                System.out.println("Up travellers: " + upTravellers);
+                
             }
-        }
-        System.out.println();
-        n.move(topFloor()-n.currentFloor());
-        System.out.println();
-        System.out.println("The elevator has move to the top of the building which is floor: "+n.currentFloor());
-        while(downTravellers > 0)
-        {
-            System.out.println();
-            System.out.println("proceed?");
-            String proceed = in.next();
-            if((proceed.equals("Y"))||(proceed.equals("y")))
+            //ONCE ALL UP TRAVELLERS HAVE ARRIVED
+            if((Customer.returnUpTravellers() == 0)&&(topFloorReached == false))//moves to the top floor when there are no more custoners travelling up
             {
-                //prints the array list
-                System.out.println();
-                System.out.println("The current floor on the elevator class is: " + n.currentFloor());
-                System.out.println();
-                for(int i = 0 ; i < totalCustomers ; i++)
-                {
-                    System.out.println(list.get(i));
-                }
-                
-                //if the customers current floor matches the elevator current floor //Possibly store this chunk of code in the customer class
-                for(int i = 0 ; i <totalCustomers ; i++)
-                {
-                    int b = (Integer) list.get(i).get(1);
-                    int c = (Integer) list.get(i).get(2);
-                    //checks that the current floor of the customers matches that of the elevator 
-                    //Checks that the destination floor of the customer is lower than their current floor thus travelling down
-                    //check that they are current not in the elevator
-                    if((b == n.currentFloor()) && (b>c) && (list.get(i).get(3)==false))
-                    {
-                        list = Customer.inElevator(i);
-                        System.out.println("Customer "+ list.get(i).get(0) + " has entered the elevator");
-                    }
-                    if((c == n.currentFloor()) && (list.get(i).get(3)==true) && (list.get(i).get(4)==false))
-                    {
-                        list = Customer.OutElevator(i);
-                        System.out.println("Customer "+ list.get(i).get(0) + " has arrived at their destination");
-                        downTravellers -= 1;
-                    }
-                }
-                
+                n.move(topFloor()-n.currentFloor());
+                topFloorReached = true;
+            }
+            //START THE DOWN TRAVELLER PROCESS
+            if(Customer.returnUpTravellers() == 0)
+            {
                 int nextCurrent = 0;
                 int nextDestination = 0;
                 int nextDownFloor = 0;
@@ -271,7 +218,7 @@ public class Building
                 {
                     for(int x = 0 ; x < totalCustomers ; x++)//cycle through the customers each time the floor changes in the for statement above
                     {
-                        if((list.get(x).get(5).equals(n.direction()))&&(list.get(x).get(3)==false)&&(list.get(x).get(4)==false))
+                        if((list.get(x).get(5).equals("DOWN"))&&(list.get(x).get(3)==false)&&(list.get(x).get(4)==false))
                         {
                             int a = (Integer)list.get(x).get(1);
                             if(a > nextCurrent)
@@ -287,7 +234,7 @@ public class Building
                 {
                     for(int x = 0 ; x < totalCustomers ; x++)//cycle through the customers each time the floor changes in the for statement above
                     {
-                        if((list.get(x).get(5).equals(n.direction()))&&(list.get(x).get(3)==true)&&(list.get(x).get(4)==false))
+                        if((list.get(x).get(5).equals("DOWN"))&&(list.get(x).get(3)==true)&&(list.get(x).get(4)==false))
                         {
                             int b = (Integer)list.get(x).get(2);
                             if(b > nextDestination)
@@ -297,216 +244,161 @@ public class Building
                         }
                     }
                 }
-                
+                //Finds the highest floor
                 nextDownFloor = Math.max(nextCurrent, nextDestination);    
                 //changes the floor of the elevator
-                System.out.println("the next floor that the elevator will travel to is: " + nextDownFloor);
                 n.move(nextDownFloor-n.currentFloor());
-
-                System.out.println("Down travellers: " + downTravellers);
             }
-            
         }
-
+        int result = n.returnFloorCount();
+        return result;
     }
     
     //second strategy
-    public static void business2()
+    public static int business2()
     {
-        System.out.println("The highest current floor: "+highestCurrent());
-        System.out.println("The highest destination floor: " + highestDestination());
         System.out.println();
-        System.out.println("Start of calculations");
         Scanner in = new Scanner(System.in);
-        int travellers = 0;
-        boolean topFloorReached = false;
+        int travellers = Customer.totalTravellers();
+        
         boolean bottomFloorReached = false;
-        //counts the number of up and down travellers
-        for(int i = 0 ; i < totalCustomers ; i++)
-        {
-            if(list.get(i).get(4)==false)
-            {
-                travellers += 1;
-            }
-        }
       
         //travelling up picking all customers up
         while(!topFloorReached)
         {
-            System.out.println();
-            System.out.println("proceed?");
-            String proceed = in.next();
-            if((proceed.equals("Y"))||(proceed.equals("y")))
+
+            //if the customers current floor matches the elevator current floor // needs to be moved to a single method to reduce duplication of code
+            for(int i = 0 ; i <totalCustomers ; i++)
             {
-                //prints the array list
-                System.out.println();
-                System.out.println("The current floor on the elevator class is: " + n.currentFloor());
-                for(int i = 0 ; i < totalCustomers ; i++)
+                int b = (Integer) list.get(i).get(1);
+                int c = (Integer) list.get(i).get(2);
+                //checks that the current floor of the customers matche sthat of the elvator 
+                //Checks that the destination floor of the customer is higher than their current floor thus travelling up
+                //chevck that they are current not in the elevator
+                if((b == n.currentFloor()) && (list.get(i).get(3)==false) && (list.get(i).get(4)==false))
                 {
-                    System.out.println(list.get(i));
+                    list = Customer.inElevator(i);
                 }
+                if((c == n.currentFloor()) && (list.get(i).get(3)==true) && (list.get(i).get(4)==false))
+                {
+                    list = Customer.OutElevator(i);
+                }
+            }
+            
+            int nextUpFloor = n.currentFloor();
     
-                //if the customers current floor matches the elevator current floor 
-                for(int i = 0 ; i <totalCustomers ; i++)
+            int nextDestinationFloor = 0;
+            int nextCurrentFloor = 0;
+            //counts the next current floor to travel to
+            outerloop:
+            for(int i = n.currentFloor() ; i <= highestCurrent() ; i++)
+            {
+                for(int x = 0 ; x < totalCustomers ; x++)
                 {
-                    int b = (Integer) list.get(i).get(1);
-                    int c = (Integer) list.get(i).get(2);
-                    //checks that the current floor of the customers matche sthat of the elvator 
-                    //Checks that the destination floor of the customer is higher than their current floor thus travelling up
-                    //chevck that they are current not in the elevator
-                    if((b == n.currentFloor()) && (list.get(i).get(3)==false) && (list.get(i).get(4)==false))
+                    
+                    if((list.get(x).get(4) == false)&&(list.get(x).get(3)==false))
                     {
-                        list = Customer.inElevator(i);
-                        System.out.println("Customer "+ list.get(i).get(0) + " has entered the elevator");
-                    }
-                    if((c == n.currentFloor()) && (list.get(i).get(3)==true) && (list.get(i).get(4)==false))
-                    {
-                        list = Customer.OutElevator(i);
-                        System.out.println("Customer "+ list.get(i).get(0) + " has arrived at their destination");
-                        travellers -= 1;
-                    }
-                }
-                
-                int nextUpFloor = n.currentFloor();
-        
-                int nextDestinationFloor = 0;
-                int nextCurrentFloor = 0;
-                //counts the next current floor to travel to
-                outerloop:
-                for(int i = n.currentFloor() ; i <= highestCurrent() ; i++)
-                {
-                    for(int x = 0 ; x < totalCustomers ; x++)
-                    {
-                        
-                        if((list.get(x).get(4) == false)&&(list.get(x).get(3)==false))
+                        int c = (Integer) list.get(x).get(1);
+                        if((c == i)&&(c > n.currentFloor()))
                         {
-                            int c = (Integer) list.get(x).get(1);
-                            if((c == i)&&(c > n.currentFloor()))
-                            {
-                                nextCurrentFloor = i;
-                                break outerloop;
-                            }
+                            nextCurrentFloor = i;
+                            break outerloop;
                         }
                     }
                 }
-                
-                //counts the next destination floor to travel to
-                outerloop:
-                for(int i = n.currentFloor() ; i <= highestDestination() ; i++)
+            }
+            
+            //counts the next destination floor to travel to
+            outerloop:
+            for(int i = n.currentFloor() ; i <= highestDestination() ; i++)
+            {
+                for(int x = 0 ; x < totalCustomers ; x++)
                 {
-                    for(int x = 0 ; x < totalCustomers ; x++)
+                    if((list.get(x).get(4) == false)&&(list.get(x).get(3) == true))
                     {
-                        if((list.get(x).get(4) == false)&&(list.get(x).get(3) == true))
+                        int c = (Integer) list.get(x).get(2);
+                        if((c == i)&&(c > n.currentFloor()))
                         {
-                            int c = (Integer) list.get(x).get(2);
-                            if((c == i)&&(c > n.currentFloor()))
-                            {
-                                nextDestinationFloor = i;
-                                break outerloop;
-                            }
+                            nextDestinationFloor = i;
+                            break outerloop;
                         }
                     }
                 }
-                
-                //Determines which floors is closer to travel to
-                if((nextCurrentFloor != 0)&&(nextDestinationFloor != 0))
-                {
-                    nextUpFloor = Math.min(nextDestinationFloor, nextCurrentFloor);
-                }
-                else if((nextCurrentFloor == 0)&&(nextDestinationFloor != 0))
-                {
-                    nextUpFloor = nextDestinationFloor;
-                }
-                else if((nextCurrentFloor != 0)&&(nextDestinationFloor == 0))
-                {
-                    nextUpFloor = nextCurrentFloor;
-                }
-        
-                
-                //changes the floor of the elevator depending on the strategy
+            }
+            
+            //Determines which floors is closer to travel to
+            if((nextCurrentFloor != 0)&&(nextDestinationFloor != 0))
+            {
+                nextUpFloor = Math.min(nextDestinationFloor, nextCurrentFloor);
+            }
+            else if((nextCurrentFloor == 0)&&(nextDestinationFloor != 0))
+            {
+                nextUpFloor = nextDestinationFloor;
+            }
+            else if((nextCurrentFloor != 0)&&(nextDestinationFloor == 0))
+            {
+                nextUpFloor = nextCurrentFloor;
+            }
+    
+            
+            //changes the floor of the elevator depending on the strategy
+            n.move(nextUpFloor-n.currentFloor());
 
-                System.out.println("the next floor that the elevator will travel to is: " + nextUpFloor);
-                n.move(nextUpFloor-n.currentFloor());
-
-                System.out.println("travellers: " + travellers);
-                if(topFloor() == n.currentFloor())
-                {
-                    topFloorReached = true;
-                    System.out.println();
-                    System.out.println("The elevator has move to the top of the building which is floor: "+n.currentFloor());
-                    System.out.println();
-                }
+            if(topFloor() == n.currentFloor())
+            {
+                topFloorReached = true;
             }
         }
         
         //travelling down picking all customers up
         while(!bottomFloorReached)
         {
-            System.out.println();
-            System.out.println("proceed?");
-            String proceed = in.next();
-            if((proceed.equals("Y"))||(proceed.equals("y")))
+            //if the customers current floor matches the elevator current floor //Possibly store this chunk of code in the customer class
+            for(int i = 0 ; i <totalCustomers ; i++)
             {
-                //prints the array list
-                System.out.println();
-                System.out.println("The current floor on the elevator class is: " + n.currentFloor());
-                for(int i = 0 ; i < totalCustomers ; i++)
+                int b = (Integer) list.get(i).get(1);
+                int c = (Integer) list.get(i).get(2);
+                //checks that the current floor of the customers matches that of the elevator 
+                //Checks that the destination floor of the customer is lower than their current floor thus travelling down
+                //check that they are current not in the elevator
+                if((b == n.currentFloor()) && (list.get(i).get(3)==false) && (list.get(i).get(4)==false))
                 {
-                    System.out.println(list.get(i));
+                    list = Customer.inElevator(i);
                 }
-                
-                //if the customers current floor matches the elevator current floor //Possibly store this chunk of code in the customer class
-                for(int i = 0 ; i <totalCustomers ; i++)
+                if((c == n.currentFloor()) && (list.get(i).get(3)==true) && (list.get(i).get(4)==false))
                 {
-                    int b = (Integer) list.get(i).get(1);
-                    int c = (Integer) list.get(i).get(2);
-                    //checks that the current floor of the customers matches that of the elevator 
-                    //Checks that the destination floor of the customer is lower than their current floor thus travelling down
-                    //check that they are current not in the elevator
-                    if((b == n.currentFloor()) && (list.get(i).get(3)==false) && (list.get(i).get(4)==false))
-                    {
-                        list = Customer.inElevator(i);
-                        System.out.println("Customer "+ list.get(i).get(0) + " has entered the elevator");
-                    }
-                    if((c == n.currentFloor()) && (list.get(i).get(3)==true) && (list.get(i).get(4)==false))
-                    {
-                        list = Customer.OutElevator(i);
-                        System.out.println("Customer "+ list.get(i).get(0) + " has arrived at their destination");
-                        travellers -= 1;
-                    }
+                    list = Customer.OutElevator(i);
                 }
-                
-                int nextCurrent = 0;
-                int nextDestination = 0;
-                int nextDownFloor = 0;
-                
-                //find the highest destination floor for the down passengers who are not in the lift and have not completed their journey //UNCONFIRMED WORKING
-                for(int i = 0 ; i <= highestDestination() ;i++)//cycle through the floors
+            }
+            
+            int nextCurrent = 0;
+            int nextDestination = 0;
+            int nextDownFloor = 0;
+            
+            //find the highest destination floor for the down passengers who are not in the lift and have not completed their journey //UNCONFIRMED WORKING
+            for(int i = 0 ; i <= highestDestination() ;i++)//cycle through the floors
+            {
+                for(int x = 0 ; x < totalCustomers ; x++)//cycle through the customers each time the floor changes in the for statement above
                 {
-                    for(int x = 0 ; x < totalCustomers ; x++)//cycle through the customers each time the floor changes in the for statement above
+                    if((list.get(x).get(3)==true)&&(list.get(x).get(4)==false))
                     {
-                        if((list.get(x).get(3)==true)&&(list.get(x).get(4)==false))
+                        int b = (Integer)list.get(x).get(2);
+                        if(b > nextDownFloor)
                         {
-                            int b = (Integer)list.get(x).get(2);
-                            if(b > nextDownFloor)
-                            {
-                                nextDownFloor = b;
-                            }
+                            nextDownFloor = b;
                         }
                     }
                 }
-                
-                System.out.println("the next floor that the elevator will travel to is: " + nextDownFloor);
-                n.move(nextDownFloor-n.currentFloor());
-
-                System.out.println("Travellers: " + travellers);
-                if(travellers == 0)
-                {
-                    bottomFloorReached = true;
-                }
+            }
+            
+            n.move(nextDownFloor-n.currentFloor());
+            if(Customer.totalCustomers() == 0)
+            {
+                bottomFloorReached = true;
             }
         }
-
+        int result = n.returnFloorCount();
+        return result;
     }
     
     //find the highest current floor //WORKING
@@ -560,10 +452,5 @@ public class Building
              }
         }
         return lowestDestination;
-    }
-    
-    public static int getFloors()
-    {
-        return totalFloors;
     }
 }

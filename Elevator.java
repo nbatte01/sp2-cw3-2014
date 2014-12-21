@@ -22,6 +22,16 @@ public class Elevator
         
     }
     
+    public void resetElevator()
+    {
+        current = 0;
+        currentOnBoard = 0;
+        numOfFloors = 0;
+        floorCount = 0;
+        topFloor = 0;
+        topFloorReached = false;
+    }
+    
     public int currentFloor()
     {
         if(current == topFloor)
@@ -56,18 +66,18 @@ public class Elevator
         if(a > 0) //go up a floor(s)
         {
             current += a;
-            System.out.println("The elevator has moved up to level: " + current);
+            //System.out.println("The elevator has moved up to level: " + current);
             floorCount += 1;
         }
         else if(a < 0)//go down a floor(s)
         {
             current += a;
-            System.out.println("The elevator has moved down to level: " + current);
+            //System.out.println("The elevator has moved down to level: " + current);
             floorCount += 1;
         }
         else 
         {
-            System.out.println("The elevator has not moved");
+            //System.out.println("The elevator has not moved");
         }
     }
     

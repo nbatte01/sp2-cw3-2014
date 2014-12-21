@@ -8,15 +8,37 @@ public class Customer
     private int destination = setDestinationFloor();
     private int currentFloor;
     private int destinationFloor;
-    int totalCustomers = 0;
+    static int totalCustomers = 0;
+    static int upTravellers = 0;
+    static int downTravellers = 0;
+    static int originalCustomers = 0;
+    static int originalUpTravellers = 0;
+    static int originalDownTravellers = 0;
     private int ID = 0;
     boolean present = false;
     boolean arrivied = false; 
     static ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+    static Elevator x = new Elevator();
     
     public int currentFloor()
     {
         return current;
+    }
+    
+    
+    public static int returnUpTravellers()
+    {
+        return upTravellers;
+    }
+    
+    public static int returnDownTravellers()
+    {
+        return downTravellers;
+    }
+    
+    public static int totalTravellers()
+    {
+        return totalCustomers;
     }
     
     public int destinationFloor()
@@ -38,9 +60,9 @@ public class Customer
     
     public int random()
     {
-        int floors = Elevator.returnFloors();
+        int floors = x.returnFloors();
         Random rn = new Random();
-        int answer = rn.nextInt(floors);
+        int answer = rn.nextInt(floors);      
         return answer;
     }
     
@@ -52,7 +74,7 @@ public class Customer
     
     public static int totalCustomers()
     {
-        return totalCustomers();
+        return totalCustomers;
     }
     
     public ArrayList<ArrayList<Object>> customerList(int a)//this method receives a number of customers from the building class and creates an array with randomly generated current floors and destination floors
@@ -81,14 +103,19 @@ public class Customer
            if(currentFloor < destinationFloor)
            {
                list.get(i).add("UP");
+               upTravellers += 1;
            }
            else
            {
                list.get(i).add("DOWN");
+               downTravellers += 1;
            }
            
         }
         totalCustomers = a;
+        originalCustomers = a;
+        originalUpTravellers = upTravellers;
+        originalDownTravellers = downTravellers;
         return list;
     }
     //receives an int from the Building class and adjusts the relevant customers on the list then returns this list for the building class to play with
@@ -103,6 +130,15 @@ public class Customer
     {
         list.get(a).set(3, false);//when the customers steps out of the elevator at their destination floor
         list.get(a).set(4, true);//when the customer has completed their journey
+        if(list.get(a).get(5).equals("UP"))
+        {
+            upTravellers -= 1;
+        }
+        else
+        {
+            downTravellers -= 1;
+        }
+        totalCustomers -= 1;
         return list;
     }
     
@@ -111,8 +147,30 @@ public class Customer
         return list;
     }
     
-    public void finished()
+    public static void resetList()
+    {
+        for(int i = 0 ; i < originalCustomers ; i++)
+        {
+            list.get(i).set(4, false);
+        }
+        upTravellers = originalUpTravellers;
+        downTravellers = originalDownTravellers;
+        totalCustomers = originalCustomers;
+    }
+    
+    //prints the current list
+    public static void printList()
+    {
+        for(int i = 0 ; i < originalCustomers ; i++)
+        {
+            System.out.println(list.get(i));            
+        }
+    }
+    
+    public static String finished()
     {
          //exercise has finished 
+         String output = "All customers have arrived at their destination. The execise has finished";
+         return output;
     }
 }
