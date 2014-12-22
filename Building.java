@@ -1,4 +1,8 @@
- import java.util.Scanner;
+/* This code was created by Nicholas Batten and Bradd Bently for the third coursework
+ * of the Software and Programming 2 module at Birkbeck, University of London (December 2014).
+ */
+
+import java.util.Scanner;
 import java.util.Arrays;
 import java.util.ArrayList;
 
@@ -9,7 +13,8 @@ public class building
     public static boolean topFloorReached = false;
     public static ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
     static Elevator n = new Elevator();
-    public static void main(String[]args)
+    //Asks the user to input the number of floor in the building and the number of customers. Prints the results from both strategies //WORKING
+    public static void main(String[]args) 
     {
         System.out.print("\f");
         Scanner in = new Scanner(System.in);
@@ -43,47 +48,54 @@ public class building
                 Customer x = new Customer();
                 list = x.customerList(totalCustomers);//customer class will return a arraylist that contain ID number, current floor, destination floor and whether or not the customer is still in the lift
                 
-                int firstCount =  business2();
+                //runs the second strategy 
+                double newCount =  business2();
                 
-                //RESETS THE CUSTOMER AND ELEVATOR CLASS
+                //Resets the required variables int he customer and elevator classes to allow the default strategy to start from scratch with the original list
                 Customer.resetList();
                 n.resetElevator();
                 
-                int secondCount =  business();
+                //runs the default strategy
+                double defaultCount =  business();
                 
                 //Display the results
+                //Second strategy results
                 System.out.println();
-                System.out.println("Second strategy results");
-                System.out.println("The total number of floors visited after the second strategy: " + firstCount);
+                System.out.println("New strategy results");
+                System.out.println("The total number of floors visited after the new strategy: " + (int)newCount);
                 System.out.println("The total number of floors in the building: "+ totalFloors);
                 //calculates the perentage of floors visited to allow for easier strategy performance review
-                double percentageVisited = (firstCount*100)/totalFloors;
-                System.out.println("Percentage of floors visited: " + percentageVisited + "%");
+                double percentageVisited = (newCount*100)/ totalFloors;
+                System.out.print("Percentage of floors visited: ");
+                System.out.printf("%.2f", percentageVisited);
+                System.out.println("%");
                 
+                //Default strategy results
                 System.out.println();
                 System.out.println("Default strategy results");
-                System.out.println("The total number of floors visited after the default strategy: " + secondCount);
+                System.out.println("The total number of floors visited after the default strategy: " + (int)defaultCount);
                 System.out.println("The total number of floors in the building: "+ totalFloors);
                 //calculates the perentage of floors visited to allow for easier strategy performance review
-                double percentageVisited2 = (secondCount*100)/totalFloors;
-                System.out.println("Percentage of floors visited: " + percentageVisited2 + "%");
+                double percentageVisited2 = (defaultCount*100)/ totalFloors;
+                System.out.print("Percentage of floors visited: ");
+                System.out.printf("%.2f", percentageVisited2);
+                System.out.println("%");
                 
+                //Print's which strategy was more efficient
                 System.out.println();
                 System.out.println("Final verdict:");
                 if(percentageVisited2 > percentageVisited)
                 {
-                    System.out.println("The second strategy was more efficient than the default as it visited " + (secondCount - firstCount) + " less floor(s)");
+                    System.out.println("The new strategy was more efficient than the default as it visited " + ((int)defaultCount - (int)newCount) + " less floor(s)");
                 }
                 else if(percentageVisited > percentageVisited2)
                 {
-                    System.out.println("The default strategy was more efficient than the second as it visited " + (firstCount - secondCount) + " less floor(s)");
+                    System.out.println("The default strategy was more efficient than the second as it visited " + ((int)newCount - (int)defaultCount) + " less floor(s)");
                 }
                 else
                 {
                     System.out.println("Both strategies acheived the same efficiency as each other");
                 }
-                
-                
                 customersCheck = true;
             }
             else
@@ -103,14 +115,9 @@ public class building
         }
         return result;
     }
-    
-    public static void customerCheck()
-    {
-        
-    }
-    
+
     //default strategy //WORKING
-    public static int business()
+    public static double business()
     {
         Scanner in = new Scanner(System.in);
         n.setTopfloor(topFloor());
@@ -139,7 +146,6 @@ public class building
             if(Customer.returnUpTravellers() > 0)
             {
                 int nextUpFloor = n.currentFloor();
-                
                 int nextDestinationFloor = 0;
                 int nextCurrentFloor = 0;
                 //counts the next current floor to travel to
@@ -148,7 +154,6 @@ public class building
                 {
                     for(int x = 0 ; x < totalCustomers ; x++)
                     {
-                        
                         if((list.get(x).get(5).equals("UP")&&(list.get(x).get(4) == false)&&(list.get(x).get(3)==false)))
                         {
                             int c = (Integer) list.get(x).get(1);
@@ -160,7 +165,6 @@ public class building
                         }
                     }
                 }
-                
                 //counts the next destination floor to travel to
                 outerloop:
                 for(int i = n.currentFloor() ; i <= highestDestination() ; i++)
@@ -200,20 +204,20 @@ public class building
                 }
                 
             }
-            //ONCE ALL UP TRAVELLERS HAVE ARRIVED
-            if((Customer.returnUpTravellers() == 0)&&(topFloorReached == false))//moves to the top floor when there are no more custoners travelling up
+            //Once all up travellers have arrived at their destination the elevator will move to the highest required floor
+            if((Customer.returnUpTravellers() == 0)&&(topFloorReached == false))
             {
                 n.move(topFloor()-n.currentFloor());
                 topFloorReached = true;
             }
-            //START THE DOWN TRAVELLER PROCESS
+            //The elevator begins to move down
             if(Customer.returnUpTravellers() == 0)
             {
                 int nextCurrent = 0;
                 int nextDestination = 0;
                 int nextDownFloor = 0;
                 
-                //find the highest current floor for the down passengers who are not in the lift and have not completed their journey //WORKING
+                //find the highest current floor and the highest destination floor for the down passengers who are not in the lift and have not completed their journey //WORKING
                 for(int i = 0 ; i <= highestDestination() ;i++)//cycle through the floors
                 {
                     for(int x = 0 ; x < totalCustomers ; x++)//cycle through the customers each time the floor changes in the for statement above
@@ -226,14 +230,6 @@ public class building
                                 nextCurrent = a;
                             }
                         }
-                    }
-                }
-                
-                //find the highest destination floor for the down passengers who are not in the lift and have not completed their journey //UNCONFIRMED WORKING
-                for(int i = 0 ; i <= highestDestination() ;i++)//cycle through the floors
-                {
-                    for(int x = 0 ; x < totalCustomers ; x++)//cycle through the customers each time the floor changes in the for statement above
-                    {
                         if((list.get(x).get(5).equals("DOWN"))&&(list.get(x).get(3)==true)&&(list.get(x).get(4)==false))
                         {
                             int b = (Integer)list.get(x).get(2);
@@ -244,37 +240,30 @@ public class building
                         }
                     }
                 }
-                //Finds the highest floor
                 nextDownFloor = Math.max(nextCurrent, nextDestination);    
-                //changes the floor of the elevator
                 n.move(nextDownFloor-n.currentFloor());
             }
         }
-        int result = n.returnFloorCount();
+        double result = n.returnFloorCount();
         return result;
     }
     
-    //second strategy
-    public static int business2()
+    //new strategy //WORKING
+    public static double business2()
     {
         System.out.println();
         Scanner in = new Scanner(System.in);
         int travellers = Customer.totalTravellers();
-        
         boolean bottomFloorReached = false;
-      
         //travelling up picking all customers up
         while(!topFloorReached)
         {
 
-            //if the customers current floor matches the elevator current floor // needs to be moved to a single method to reduce duplication of code
+            //if the customers current floor matches the elevator current floor or the customer's destination floors matches the current floor
             for(int i = 0 ; i <totalCustomers ; i++)
             {
                 int b = (Integer) list.get(i).get(1);
                 int c = (Integer) list.get(i).get(2);
-                //checks that the current floor of the customers matche sthat of the elvator 
-                //Checks that the destination floor of the customer is higher than their current floor thus travelling up
-                //chevck that they are current not in the elevator
                 if((b == n.currentFloor()) && (list.get(i).get(3)==false) && (list.get(i).get(4)==false))
                 {
                     list = Customer.inElevator(i);
@@ -339,11 +328,9 @@ public class building
             {
                 nextUpFloor = nextCurrentFloor;
             }
-    
             
-            //changes the floor of the elevator depending on the strategy
             n.move(nextUpFloor-n.currentFloor());
-
+            
             if(topFloor() == n.currentFloor())
             {
                 topFloorReached = true;
@@ -375,7 +362,7 @@ public class building
             int nextDestination = 0;
             int nextDownFloor = 0;
             
-            //find the highest destination floor for the down passengers who are not in the lift and have not completed their journey //UNCONFIRMED WORKING
+            //find the highest destination floor for the down passengers who are not in the lift and have not completed their journey 
             for(int i = 0 ; i <= highestDestination() ;i++)//cycle through the floors
             {
                 for(int x = 0 ; x < totalCustomers ; x++)//cycle through the customers each time the floor changes in the for statement above
@@ -390,14 +377,13 @@ public class building
                     }
                 }
             }
-            
             n.move(nextDownFloor-n.currentFloor());
             if(Customer.totalCustomers() == 0)
             {
                 bottomFloorReached = true;
             }
         }
-        int result = n.returnFloorCount();
+        double result = n.returnFloorCount();
         return result;
     }
     
@@ -416,7 +402,7 @@ public class building
         return highestCurrent;
     }
     
-    //highest floor of the builing based on the customer's current and destination floors
+    //highest floor of the builing based on the customer's current and destination floors //WORKING
     public static int topFloor()
     {
         int a = Math.max(highestCurrent(),highestDestination());
@@ -437,20 +423,5 @@ public class building
         }
         return highestDestination;
     }
-    
-    //find the lowest destination
-    public static int lowestDestination()
-    {
-        int lowestDestination = 0;
-        for(int i = 0 ; i<totalCustomers ; i++)
-        {
-             int b = (Integer) list.get(i).get(2);
-             if (b > lowestDestination)
-             {
-                 lowestDestination = b;
-                 break;
-             }
-        }
-        return lowestDestination;
-    }
+
 }

@@ -1,3 +1,7 @@
+/* This code was created by Nicholas Batten and Bradd Bently for the third coursework
+ * of the Software and Programming 2 module at Birkbeck, University of London (December 2014).
+ */
+
 import java.util.Random;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -19,12 +23,7 @@ public class Customer
     boolean arrivied = false; 
     static ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
     static Elevator x = new Elevator();
-    
-    public int currentFloor()
-    {
-        return current;
-    }
-    
+
     
     public static int returnUpTravellers()
     {
@@ -142,11 +141,7 @@ public class Customer
         return list;
     }
     
-    public static ArrayList<ArrayList<Object>> returnList()
-    {
-        return list;
-    }
-    
+    //resets the list to it's original state
     public static void resetList()
     {
         for(int i = 0 ; i < originalCustomers ; i++)

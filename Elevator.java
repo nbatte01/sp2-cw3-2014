@@ -1,7 +1,10 @@
+/* This code was created by Nicholas Batten and Bradd Bently for the third coursework
+ * of the Software and Programming 2 module at Birkbeck, University of London (December 2014).
+ */
+
 public class Elevator
 {
     private int current = 0;
-    private int currentOnBoard = 0;
     private static int numOfFloors;
     int floorCount = 0; 
     int topFloor = 0;
@@ -17,15 +20,9 @@ public class Elevator
         return numOfFloors;
     }
     
-    public void registerList()
-    {
-        
-    }
-    
     public void resetElevator()
     {
         current = 0;
-        currentOnBoard = 0;
         numOfFloors = 0;
         floorCount = 0;
         topFloor = 0;
@@ -81,27 +78,9 @@ public class Elevator
         }
     }
     
-    public void customerJoins()
-    {
-        currentOnBoard++;
-    }
-    
     public int returnFloorCount()
     {
         return floorCount;
     }
-    
-    public void customerLeaves()
-    {
-        if(currentOnBoard == 0)
-        {
-            System.out.println("There are currently no customers on board");
-        }
-        else
-        {
-            System.out.println("A customer has left the elevator");
-            currentOnBoard--;
-        }
-           
-    }
+
 }
