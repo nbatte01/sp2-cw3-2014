@@ -130,7 +130,7 @@ public class Building
         {
                 
             //if the customers current floor matches the elevator current floor or destination floor
-            for(int i = 0 ; i <totalCustomers ; i++)
+            for(int i = 0 ; i <Cus.returnOriginalCustomers() ; i++)
             {
                 int b = (Integer) Cus.returnList().get(i).get(1);
                 int c = (Integer) Cus.returnList().get(i).get(2);
@@ -155,7 +155,7 @@ public class Building
                 outerloop:
                 for(int i = Ele.currentFloor() ; i <= highestDestination() ; i++)
                 {
-                    for(int x = 0 ; x < totalCustomers ; x++)
+                    for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)
                     {
                         if((Cus.returnList().get(x).get(5).equals("UP")&&(Cus.returnList().get(x).get(4) == false)&&(Cus.returnList().get(x).get(3)==false)))
                         {
@@ -172,7 +172,7 @@ public class Building
                 outerloop:
                 for(int i = Ele.currentFloor() ; i <= highestDestination() ; i++)
                 {
-                    for(int x = 0 ; x < totalCustomers ; x++)
+                    for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)
                     {
                         if((Cus.returnList().get(x).get(5).equals("UP"))&&(Cus.returnList().get(x).get(4) == false)&&(Cus.returnList().get(x).get(3) == true))
                         {
@@ -218,7 +218,7 @@ public class Building
                 //find the highest current floor and the highest destination floor for the down passengers who are not in the lift and have not completed their journey //WORKING
                 for(int i = 0 ; i <= highestDestination() ;i++)//cycle through the floors
                 {
-                    for(int x = 0 ; x < totalCustomers ; x++)//cycle through the customers each time the floor changes in the for statement above
+                    for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)//cycle through the customers each time the floor changes in the for statement above
                     {
                         if((Cus.returnList().get(x).get(5).equals("DOWN"))&&(Cus.returnList().get(x).get(3)==false)&&(Cus.returnList().get(x).get(4)==false))
                         {
@@ -258,7 +258,7 @@ public class Building
         {
 
             //if the customers current floor matches the elevator current floor or the customer's destination floors matches the current floor
-            for(int i = 0 ; i <totalCustomers ; i++)
+            for(int i = 0 ; i <Cus.returnOriginalCustomers() ; i++)
             {
                 int b = (Integer) Cus.returnList().get(i).get(1);
                 int c = (Integer) Cus.returnList().get(i).get(2);
@@ -278,7 +278,7 @@ public class Building
             outerloop:
             for(int i = Ele.currentFloor() ; i <= highestCurrent() ; i++)
             {
-                for(int x = 0 ; x < totalCustomers ; x++)
+                for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)
                 {
                     
                     if((Cus.returnList().get(x).get(4) == false)&&(Cus.returnList().get(x).get(3)==false))
@@ -297,7 +297,7 @@ public class Building
             outerloop:
             for(int i = Ele.currentFloor() ; i <= highestDestination() ; i++)
             {
-                for(int x = 0 ; x < totalCustomers ; x++)
+                for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)
                 {
                     if((Cus.returnList().get(x).get(4) == false)&&(Cus.returnList().get(x).get(3) == true))
                     {
@@ -337,7 +337,7 @@ public class Building
         while(!bottomFloorReached)
         {
             //if the customers current floor matches the elevator current floor //Possibly store this chunk of code in the customer class
-            for(int i = 0 ; i <totalCustomers ; i++)
+            for(int i = 0 ; i <Cus.returnOriginalCustomers() ; i++)
             {
                 int b = (Integer) Cus.returnList().get(i).get(1);
                 int c = (Integer) Cus.returnList().get(i).get(2);
@@ -358,7 +358,7 @@ public class Building
             //find the highest destination floor for the down passengers who are not in the lift and have not completed their journey 
             for(int i = 0 ; i <= highestDestination() ;i++)//cycle through the floors
             {
-                for(int x = 0 ; x < totalCustomers ; x++)//cycle through the customers each time the floor changes in the for statement above
+                for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)//cycle through the customers each time the floor changes in the for statement above
                 {
                     if((Cus.returnList().get(x).get(3)==true)&&(Cus.returnList().get(x).get(4)==false))
                     {
@@ -384,7 +384,7 @@ public class Building
     public static int highestCurrent()
     {
         int highestCurrent = 0;
-        for(int i = 0; i < totalCustomers ; i++)
+        for(int i = 0; i < Cus.returnOriginalCustomers() ; i++)
         {
             int a = (Integer) Cus.returnList().get(i).get(1);
             if(a > highestCurrent)
@@ -406,7 +406,7 @@ public class Building
     public static int highestDestination()
     {
         int highestDestination = 0;
-        for(int i = 0 ; i< totalCustomers ; i++)
+        for(int i = 0 ; i< Cus.returnOriginalCustomers() ; i++)
         {
             int b = (Integer) Cus.returnList().get(i).get(2);
             if(b > highestDestination)

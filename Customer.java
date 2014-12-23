@@ -37,6 +37,11 @@ public class Customer
         return downTravellers;
     }
     
+    public static int returnOriginalCustomers()
+    {
+        return originalCustomers;
+    }
+    
     //Used by the Building class. Return the total number of customers who have not completed their journey
     public static int totalTravellers()
     {
@@ -74,7 +79,7 @@ public class Customer
     //receives two integers from the Building class, number of customers and number of floors, and then generates a 2D arraylist that contains a customer ID,
     //The customers current floor, The customers destination floor, whether or not the customer is currently in the lift, whether or not the customer has completed
     //their journey and the direction they are travelling in
-    public  void customerList(int a, int b)//this method receives a number of customers from the building class and creates an array with randomly generated current floors and destination floors
+    public void customerList(int a, int b)//this method receives a number of customers from the building class and creates an array with randomly generated current floors and destination floors
     {
         int id;
         floors = b;
