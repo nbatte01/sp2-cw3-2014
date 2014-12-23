@@ -13,6 +13,7 @@ public class Customer
     private int currentFloor;
     private int destinationFloor;
     static int totalCustomers = 0;
+    static int floors = 0;
     static int upTravellers = 0;
     static int downTravellers = 0;
     static int originalCustomers = 0;
@@ -24,61 +25,59 @@ public class Customer
     static ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
     static Elevator x = new Elevator();
 
-    
+    //Used by the Building Class. Returns the total number of  travelling customers who have not completed their journey
     public static int returnUpTravellers()
     {
         return upTravellers;
     }
     
+    //Used by the Building Class. Returns the total number of downwards travelling customers who have not completed their journey
     public static int returnDownTravellers()
     {
         return downTravellers;
     }
     
+    //Used by the Building class. Return the total number of customers who have not completed their journey
     public static int totalTravellers()
     {
         return totalCustomers;
     }
     
-    public int destinationFloor()
-    {
-        return destination;
-    }
-    
+    //Sets a current floor for use int the arraylist
     public int setCurrentFloor()
     {
-        int output = random();
+        int output = random(0, floors);
         return output;
     }
     
+    //Sets a destiantion floor for use in the arraylist
     public int setDestinationFloor()
     {
-        int output = random();
+        int output = random(0, floors);
         return output;
     }
     
-    public int random()
+    //Generates a random integer between the ground floor and the highest floor of the building
+    public int random(int a, int b)
     {
-        int floors = x.returnFloors();
-        Random rn = new Random();
-        int answer = rn.nextInt(floors);      
+        int answer = a + (int)(Math.random() * ((b - a) + 1));
         return answer;
     }
     
+    //Returns an ID number for use in the arraylist
     public int ID()
     {
         ID++;
         return ID;
     }
     
-    public static int totalCustomers()
-    {
-        return totalCustomers;
-    }
-    
-    public ArrayList<ArrayList<Object>> customerList(int a)//this method receives a number of customers from the building class and creates an array with randomly generated current floors and destination floors
+    //receives two integers from the Building class, number of customers and number of floors, and then generates a 2D arraylist that contains a customer ID,
+    //The customers current floor, The customers destination floor, whether or not the customer is currently in the lift, whether or not the customer has completed
+    //their journey and the direction they are travelling in
+    public  void customerList(int a, int b)//this method receives a number of customers from the building class and creates an array with randomly generated current floors and destination floors
     {
         int id;
+        floors = b;
         boolean onBoard = false;
         boolean journeyComplete = false;
         for(int i = 0; i < a ;i++)
@@ -115,17 +114,22 @@ public class Customer
         originalCustomers = a;
         originalUpTravellers = upTravellers;
         originalDownTravellers = downTravellers;
-        return list;
     }
-    //receives an int from the Building class and adjusts the relevant customers on the list then returns this list for the building class to play with
-    public static ArrayList<ArrayList<Object>> inElevator(int a)
+    
+    //receives an int from the Building class and adjusts the relevant customers on the list to mark them as present in the elevator
+    public static void inElevator(int a)
     {
         list.get(a).set(3, true);
+    }
+    
+    //Returns the list of customers
+    public static ArrayList<ArrayList<Object>> returnList()
+    {
         return list;
     }
     
-    //when the customer arrives at their destination floor
-    public static ArrayList<ArrayList<Object>> OutElevator(int a)
+    //receives an int from the Building class and adjusts the relevant customers on the list to mark them as having completed their journey
+    public static void OutElevator(int a)
     {
         list.get(a).set(3, false);//when the customers steps out of the elevator at their destination floor
         list.get(a).set(4, true);//when the customer has completed their journey
@@ -138,10 +142,10 @@ public class Customer
             downTravellers -= 1;
         }
         totalCustomers -= 1;
-        return list;
     }
     
-    //resets the list to it's original state
+    //resets the list to it's original state by marking all customers has having not completed their journey and 
+    //resetting the variables that count the number of customers remaining
     public static void resetList()
     {
         for(int i = 0 ; i < originalCustomers ; i++)
@@ -153,7 +157,7 @@ public class Customer
         totalCustomers = originalCustomers;
     }
     
-    //prints the current list
+    //prints the current list //This is redundant in the final version of this assignment but is kept to aid in possible future improvements to the code
     public static void printList()
     {
         for(int i = 0 ; i < originalCustomers ; i++)
@@ -161,11 +165,5 @@ public class Customer
             System.out.println(list.get(i));            
         }
     }
-    
-    public static String finished()
-    {
-         //exercise has finished 
-         String output = "All customers have arrived at their destination. The execise has finished";
-         return output;
-    }
+
 }

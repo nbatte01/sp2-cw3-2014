@@ -10,16 +10,13 @@ public class Elevator
     int topFloor = 0;
     boolean topFloorReached = false;
     
+    //receives the total number of floors from the building class
     public void setFloors(int a)
     {
         numOfFloors = a;
     }
     
-    public static int returnFloors()
-    {
-        return numOfFloors;
-    }
-    
+    //resets the elevator after a strategy in the Building class has been completed to allow for another to begin
     public void resetElevator()
     {
         current = 0;
@@ -29,6 +26,7 @@ public class Elevator
         topFloorReached = false;
     }
     
+    //Returns the current floor of the elevator
     public int currentFloor()
     {
         if(current == topFloor)
@@ -38,11 +36,13 @@ public class Elevator
         return current;
     }
     
+    //receives the highest floor of the building from the Building class
     public void setTopfloor(int a)
     {
         topFloor = a;
     }
     
+    //Returns the direction that the elvator is travelling in
     public String direction()
     {
         String direction = "";
@@ -58,26 +58,22 @@ public class Elevator
         return direction;
     }
     
-    public void move(int a)//send this method an int of the nunber of floors to change ie -1, -2 or plus two. If the user only sends a 0 then floors do not move
+    //Receives an int from the building class and move the elevator to the required floor. Keeps a count of the number of floors visited
+    public void move(int a)
     {
         if(a > 0) //go up a floor(s)
         {
             current += a;
-            //System.out.println("The elevator has moved up to level: " + current);
             floorCount += 1;
         }
         else if(a < 0)//go down a floor(s)
         {
             current += a;
-            //System.out.println("The elevator has moved down to level: " + current);
             floorCount += 1;
-        }
-        else 
-        {
-            //System.out.println("The elevator has not moved");
         }
     }
     
+    //returns the number of floors visited
     public int returnFloorCount()
     {
         return floorCount;
