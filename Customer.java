@@ -37,6 +37,7 @@ public class Customer
         return downTravellers;
     }
     
+    //return the total number of passengers who are part of the exercise
     public static int returnOriginalCustomers()
     {
         return originalCustomers;
