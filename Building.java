@@ -1,10 +1,8 @@
-/* This code was created by Nicholas Batten and Bradd Bently for the third coursework
+/* This code was created by Nicholas Batten and Bradd Bentley for the third course work
  * of the Software and Programming 2 module at Birkbeck, University of London (December 2014).
  */
 
 import java.util.Scanner;
-import java.util.Arrays;
-import java.util.ArrayList;
 
 public class Building
 {
@@ -16,97 +14,108 @@ public class Building
     //Asks the user to input the number of floor in the building and the number of customers. Prints the results from both strategies //WORKING
     public static void main(String[]args) 
     {
-        System.out.print("\f");
-        Scanner in = new Scanner(System.in);
         boolean floorsCheck = false;
         boolean customersCheck = false; 
-        //Ensures that the user inputs and int which is then stored as the total number of floors
-        while(floorsCheck == false)
-        {
-            System.out.print("Please enter the number of floors: ");
-            String floors = in.next();
-            if(intValidation(floors))
-            {
-                totalFloors = (Integer.valueOf(floors));
-                floorsCheck = true;
-            }
-            else
-            {
-                System.out.println("Pleas enesure that you enter an int");
-            }
-        }
-        //Ensures that the user inputs an int which is then stored as the total number of customers
+    	
+    	
+    	System.out.print("\f");
+        Scanner in = null;
+        try {
+        	in = new Scanner(System.in);
         
-        while(customersCheck == false)
-        {
-            System.out.print("Please enter the number of customers: ");
-            String customers = in.next();
-            if(intValidation(customers))
+            //Ensures that the user inputs and integer which is then stored as the total number of floors
+            while(floorsCheck == false)
             {
-                Ele.setFloors(totalFloors);
-                totalCustomers = (Integer.valueOf(customers));
-                //requires the number of floors to be preset
-                Cus.customerList(totalCustomers, totalFloors);//customer class will return a arraylist that contain ID number, current floor, destination floor and whether or not the customer is still in the lift
-                
-                //runs the new strategy 
-                double newCount =  business2();
-                
-                //Resets the required variables int the customer and elevator classes to allow the default strategy to start from scratch with the original list
-                Cus.resetList();
-                Ele.resetElevator();
-                
-                //runs the default strategy
-                double defaultCount =  business();
-
-                //Display the results
-                //new strategy results
-                System.out.println();
-                System.out.println("New strategy results");
-                System.out.println("The total number of floors visited after the new strategy: " + (int)newCount);
-                System.out.println("The total number of floors in the building: "+ totalFloors);
-                //calculates the perentage of floors visited to allow for easier strategy performance review
-                double percentageVisited = (newCount*100)/ totalFloors;
-                System.out.print("Percentage of floors visited: ");
-                System.out.printf("%.2f", percentageVisited);
-                System.out.println("%");
-                
-                //Default strategy results
-                System.out.println();
-                System.out.println("Default strategy results");
-                System.out.println("The total number of floors visited after the default strategy: " + (int)defaultCount);
-                System.out.println("The total number of floors in the building: "+ totalFloors);
-                //calculates the perentage of floors visited to allow for easier strategy performance review
-                double percentageVisited2 = (defaultCount*100)/ totalFloors;
-                System.out.print("Percentage of floors visited: ");
-                System.out.printf("%.2f", percentageVisited2);
-                System.out.println("%");
-                
-                //Print's which strategy was more efficient
-                System.out.println();
-                System.out.println("Final verdict:");
-                if(percentageVisited2 > percentageVisited)
+                System.out.print("Please enter the number of floors: ");
+                String floors = in.next();
+                if(intValidation(floors))
                 {
-                    System.out.println("The new strategy was more efficient than the default as it visited " + ((int)defaultCount - (int)newCount) + " less floor(s)");
-                }
-                else if(percentageVisited > percentageVisited2)
-                {
-                    System.out.println("The default strategy was more efficient than the second as it visited " + ((int)newCount - (int)defaultCount) + " less floor(s)");
+                    totalFloors = (Integer.valueOf(floors));
+                    floorsCheck = true;
                 }
                 else
                 {
-                    System.out.println("Both strategies acheived the same efficiency as each other");
+                    System.out.println("Pleas enesure that you enter an int");
                 }
-                customersCheck = true;
             }
-            else
+            
+            while(customersCheck == false)
             {
-                System.out.println("Please ensure that you only enter an int");
+                System.out.print("Please enter the number of customers: ");
+                String customers = in.next();
+                if(intValidation(customers))
+                {
+                    Ele.setFloors(totalFloors);
+                    totalCustomers = (Integer.valueOf(customers));
+                    //requires the number of floors to be preset
+                    Cus.customerList(totalCustomers, totalFloors);//customer class will return a array list that contain ID number, current floor, destination floor and whether or not the customer is still in the lift
+                    
+                    //runs the new strategy 
+                    double newCount =  business2();
+                    
+                    //Resets the required variables integer the customer and elevator classes to allow the default strategy to start from scratch with the original list
+                    Cus.resetList();
+                    Ele.resetElevator();
+                    
+                    //runs the default strategy
+                    double defaultCount =  business();
+
+                    //Display the results
+                    //new strategy results
+                    System.out.println();
+                    System.out.println("New strategy results");
+                    System.out.println("The total number of floors visited after the new strategy: " + (int)newCount);
+                    System.out.println("The total number of floors in the building: "+ totalFloors);
+                    //calculates the percentage of floors visited to allow for easier strategy performance review
+                    double percentageVisited = (newCount*100)/ totalFloors;
+                    System.out.print("Percentage of floors visited: ");
+                    System.out.printf("%.2f", percentageVisited);
+                    System.out.println("%");
+                    
+                    //Default strategy results
+                    System.out.println();
+                    System.out.println("Default strategy results");
+                    System.out.println("The total number of floors visited after the default strategy: " + (int)defaultCount);
+                    System.out.println("The total number of floors in the building: "+ totalFloors);
+                    //calculates the percentage of floors visited to allow for easier strategy performance review
+                    double percentageVisited2 = (defaultCount*100)/ totalFloors;
+                    System.out.print("Percentage of floors visited: ");
+                    System.out.printf("%.2f", percentageVisited2);
+                    System.out.println("%");
+                    
+                    //Print's which strategy was more efficient
+                    System.out.println();
+                    System.out.println("Final verdict:");
+                    if(percentageVisited2 > percentageVisited)
+                    {
+                        System.out.println("The new strategy was more efficient than the default as it visited " + ((int)defaultCount - (int)newCount) + " less floor(s)");
+                    }
+                    else if(percentageVisited > percentageVisited2)
+                    {
+                        System.out.println("The default strategy was more efficient than the second as it visited " + ((int)newCount - (int)defaultCount) + " less floor(s)");
+                    }
+                    else
+                    {
+                        System.out.println("Both strategies acheived the same efficiency as each other");
+                    }
+                    customersCheck = true;
+                }
+                else
+                {
+                    System.out.println("Please ensure that you only enter an int");
+                }
             }
+            
         }
+        finally{
+        	if(in != null)
+        		in.close();
+        }
+        
     }
     
-    //Validates the input string to ensure that it is a number which can be converted to an int //WORKING
-    //receives parameter of type String and return boolean val
+    //Validates the input string to ensure that it is a number which can be converted to an integer //WORKING
+    //receives parameter of type String and return boolean value
     public static boolean intValidation(String a) 
     {
         boolean result = false;
@@ -120,8 +129,8 @@ public class Building
     //default strategy //WORKING
     //returns data type double which is the number of floors that have been visited
     //This is the default strategy. This strategy picks up passengers that are travelling up on it's way to the highest required floor whilst letting out all 
-    //passengers travelling up that arrive at their destiantion. Once the elevator is at the highest floor it proceeeds to head to the ground floor picking up
-    //and dropping off all passenegrs that wish to travel in the downward direction. No downward travelling passengers enter the elevator on the way to the top
+    //passengers travelling up that arrive at their destination. Once the elevator is at the highest floor it proceeeds to head to the ground floor picking up
+    //and dropping off all passengers that wish to travel in the downward direction. No downward travelling passengers enter the elevator on the way to the top
     public static double business()
     {
         Ele.setTopfloor(topFloor());
@@ -135,12 +144,12 @@ public class Building
                 int b = (Integer) Cus.returnList().get(i).get(1);
                 int c = (Integer) Cus.returnList().get(i).get(2);
                 //can only board the elevator if the customer is travelling in the correct direction, not currently in the elevator and have not already complted their journey
-                if((b == Ele.currentFloor()) && (Cus.returnList().get(i).get(5).equals(Ele.direction()) && (Cus.returnList().get(i).get(3)==false))&&(Cus.returnList().get(i).get(4)==false))
+                if((b == Ele.currentFloor()) && (Cus.returnList().get(i).get(5).equals(Ele.direction()) && (Cus.returnList().get(i).get(3).equals(false)))&&(Cus.returnList().get(i).get(4).equals(false)))
                 {
                     Cus.inElevator(i);
                 }
                 //exit the elevatpr if the customer is currently in the elevator and have not completed their journey
-                if((c == Ele.currentFloor()) && (Cus.returnList().get(i).get(3)==true) && (Cus.returnList().get(i).get(4)==false))
+                if((c == Ele.currentFloor()) && (Cus.returnList().get(i).get(3).equals(true)) && (Cus.returnList().get(i).get(4).equals(false)))
                 {
                     Cus.OutElevator(i);
                 }
@@ -157,7 +166,7 @@ public class Building
                 {
                     for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)
                     {
-                        if((Cus.returnList().get(x).get(5).equals("UP")&&(Cus.returnList().get(x).get(4) == false)&&(Cus.returnList().get(x).get(3)==false)))
+                        if((Cus.returnList().get(x).get(5).equals("UP")&&(Cus.returnList().get(x).get(4).equals(false))&&(Cus.returnList().get(x).get(3).equals(false))))
                         {
                             int c = (Integer) Cus.returnList().get(x).get(1);
                             if((c == i)&&(c > Ele.currentFloor()))
@@ -174,7 +183,7 @@ public class Building
                 {
                     for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)
                     {
-                        if((Cus.returnList().get(x).get(5).equals("UP"))&&(Cus.returnList().get(x).get(4) == false)&&(Cus.returnList().get(x).get(3) == true))
+                        if((Cus.returnList().get(x).get(5).equals("UP"))&&(Cus.returnList().get(x).get(4).equals(false))&&(Cus.returnList().get(x).get(3).equals(true)))
                         {
                             int c = (Integer) Cus.returnList().get(x).get(2);
                             if((c == i)&&(c > Ele.currentFloor()))
@@ -220,7 +229,7 @@ public class Building
                 {
                     for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)//cycle through the customers each time the floor changes in the for statement above
                     {
-                        if((Cus.returnList().get(x).get(5).equals("DOWN"))&&(Cus.returnList().get(x).get(3)==false)&&(Cus.returnList().get(x).get(4)==false))
+                        if((Cus.returnList().get(x).get(5).equals("DOWN"))&&(Cus.returnList().get(x).get(3).equals(false))&&(Cus.returnList().get(x).get(4).equals(false)))
                         {
                             int a = (Integer)Cus.returnList().get(x).get(1);
                             if(a > nextCurrent)
@@ -228,7 +237,7 @@ public class Building
                                 nextCurrent = a;
                             }
                         }
-                        if((Cus.returnList().get(x).get(5).equals("DOWN"))&&(Cus.returnList().get(x).get(3)==true)&&(Cus.returnList().get(x).get(4)==false))
+                        if((Cus.returnList().get(x).get(5).equals("DOWN"))&&(Cus.returnList().get(x).get(3).equals(true))&&(Cus.returnList().get(x).get(4).equals(false)))
                         {
                             int b = (Integer)Cus.returnList().get(x).get(2);
                             if(b > nextDestination)
@@ -262,11 +271,11 @@ public class Building
             {
                 int b = (Integer) Cus.returnList().get(i).get(1);
                 int c = (Integer) Cus.returnList().get(i).get(2);
-                if((b == Ele.currentFloor()) && (Cus.returnList().get(i).get(3)==false) && (Cus.returnList().get(i).get(4)==false))
+                if((b == Ele.currentFloor()) && (Cus.returnList().get(i).get(3).equals(false)) && (Cus.returnList().get(i).get(4).equals(false)))
                 {
                     Cus.inElevator(i);
                 }
-                if((c == Ele.currentFloor()) && (Cus.returnList().get(i).get(3)==true) && (Cus.returnList().get(i).get(4)==false))
+                if((c == Ele.currentFloor()) && (Cus.returnList().get(i).get(3).equals(true)) && (Cus.returnList().get(i).get(4).equals(false)))
                 {
                     Cus.OutElevator(i);
                 }
@@ -281,7 +290,7 @@ public class Building
                 for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)
                 {
                     
-                    if((Cus.returnList().get(x).get(4) == false)&&(Cus.returnList().get(x).get(3)==false))
+                    if((Cus.returnList().get(x).get(4).equals(false))&&(Cus.returnList().get(x).get(3).equals(false)))
                     {
                         int c = (Integer) Cus.returnList().get(x).get(1);
                         if((c == i)&&(c > Ele.currentFloor()))
@@ -299,7 +308,7 @@ public class Building
             {
                 for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)
                 {
-                    if((Cus.returnList().get(x).get(4) == false)&&(Cus.returnList().get(x).get(3) == true))
+                    if((Cus.returnList().get(x).get(4).equals(false))&&(Cus.returnList().get(x).get(3).equals(true)))
                     {
                         int c = (Integer) Cus.returnList().get(x).get(2);
                         if((c == i)&&(c > Ele.currentFloor()))
@@ -337,22 +346,22 @@ public class Building
         while(!bottomFloorReached)
         {
             //if the customers current floor matches the elevator current floor //Possibly store this chunk of code in the customer class
-            for(int i = 0 ; i <Cus.returnOriginalCustomers() ; i++)
+            for(int i = 0 ; i < Cus.returnOriginalCustomers() ; i++)
             {
                 int b = (Integer) Cus.returnList().get(i).get(1);
                 int c = (Integer) Cus.returnList().get(i).get(2);
-                if((b == Ele.currentFloor()) && (Cus.returnList().get(i).get(3)==false) && (Cus.returnList().get(i).get(4)==false))
+                if((b == Ele.currentFloor()) && (Cus.returnList().get(i).get(3).equals(false)) && (Cus.returnList().get(i).get(4).equals(false)))
                 {
                     Cus.inElevator(i);
                 }
-                if((c == Ele.currentFloor()) && (Cus.returnList().get(i).get(3)==true) && (Cus.returnList().get(i).get(4)==false))
+                if((c == Ele.currentFloor()) && (Cus.returnList().get(i).get(3).equals(true)) && (Cus.returnList().get(i).get(4).equals(false)))
                 {
                     Cus.OutElevator(i);
                 }
             }
             
-            int nextCurrent = 0;
-            int nextDestination = 0;
+            //int nextCurrent = 0;
+            //int nextDestination = 0;
             int nextDownFloor = 0;
             
             //find the highest destination floor for the down passengers who are not in the lift and have not completed their journey 
@@ -360,7 +369,7 @@ public class Building
             {
                 for(int x = 0 ; x < Cus.returnOriginalCustomers() ; x++)//cycle through the customers each time the floor changes in the for statement above
                 {
-                    if((Cus.returnList().get(x).get(3)==true)&&(Cus.returnList().get(x).get(4)==false))
+                    if((Cus.returnList().get(x).get(3).equals(true))&&(Cus.returnList().get(x).get(4).equals(false)))
                     {
                         int b = (Integer)Cus.returnList().get(x).get(2);
                         if(b > nextDownFloor)
@@ -395,7 +404,7 @@ public class Building
         return highestCurrent;
     }
     
-    //highest floor of the builing based on the customer's current and destination floors //WORKING
+    //highest floor of the building based on the customer's current and destination floors //WORKING
     public static int topFloor()
     {
         int a = Math.max(highestCurrent(),highestDestination());
